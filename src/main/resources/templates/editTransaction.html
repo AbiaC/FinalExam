@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="template1">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/webjars/bootstrap/5.1.3/css/bootstrap.min.css">
+</head>
+<body>
+<section layout:fragment="content">
+  <div class="col-md-6 offset-3">
+    <form method="post" th:action="@{save}">
+      <div>
+        <label>Transaction Number</label>
+        <input class="form-control" type="text" name="id" th:value="${Transaction.transaction_id}" readonly>
+        <span th:errors="${Transaction.transaction_id}"></span>
+      </div>
+      <div>
+        <label>Date of Transaction</label>
+        <input class="form-control" type="text" name="name" th:value="${Transaction.transaction_date}">
+        <span th:errors="${Transaction.transaction_date}"></span>
+      </div>
+      <div>
+        <label>Salesman</label>
+        <input class="form-control" type="date" name="dob" th:value="${Transaction.salesman}">
+        <span th:errors="${Transaction.salesman}"></span>
+      </div>
+      <div>
+        <label>Amount</label>
+        <input class="form-control" type="text" name="Amount" th:checked="${Transaction.amount}">
+        <span th:errors="${Transaction.amount}"></span>
+      </div>
+      <div>
+        <label>Item Type</label>
+        <input class="form-control" type="text" name="itemType" th:value="${Transaction.item}">
+        <span th:errors="${Transaction.item}"></span>
+      </div>
+      <button type="submit" class="btn-primary">Save</button>
+    </form>
+  </div>
+</section>
+</body>
+</html>

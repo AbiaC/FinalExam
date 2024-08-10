@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Summary</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .sales-summary {
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .sales-form {
+            background-color: #5173d1;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .sales-history {
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            color: black;
+        }
+        button {
+            background-color: #015cb6;
+            color: white;
+            border: none;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+        .form-buttons {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="sales-summary">
+        <h2>Sales Summary</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Salesman</th>
+                <th>Washing Machine</th>
+                <th>Refrigerator</th>
+                <th>Music System</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="transaction : ${transactions}">
+                <td th:text="${transaction.salesman}"></td>
+                <td th:if="${transaction.item == 'Washing Machine'}" th:text="${transaction.amount}"></td>
+                <td th:if="${transaction.item == 'Refrigerator'}" th:text="${transaction.amount}"></td>
+                <td th:if="${transaction.item == 'Music System'}" th:text="${transaction.amount}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="sales-form">
+        <h2>Sales Form</h2>
+        <form th:action="@{/saveTransaction}" th:object="${transaction}" method="post">
+            <label for="salesman-name">Salesman Name:</label>
+            <input type="text" id="salesman-name" name="salesman" th:field="*{salesman}" required>
+
+            <label for="item-type">Item Type:</label>
+            <select id="item-type" name="item" th:field="*{item}" required>
+                <option value="">Select Item</option>
+                <option value="Washing Machine">Washing Machine</option>
+                <option value="Refrigerator">Refrigerator</option>
+                <option value="Music System">Music System</option>
+            </select>
+
+            <label for="sales-amount">Sales Amount:</label>
+            <input type="number" id="sales-amount" name="amount" th:field="*{amount}" step="0.01" required>
+
+            <label for="transaction-date">Transaction Date:</label>
+            <input type="date" id="transaction-date" name="transaction_date" th:field="*{transactionDate}" required>
+
+            <div class="form-buttons">
+                <button type="submit">Save</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="sales-history">
+        <h2>Sales History</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Transaction Code</th>
+                <th>Salesman</th>
+                <th>Item</th>
+                <th>Amount</th>
+                <th>Transaction Date</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="transaction : ${transactions}">
+                <td th:text="${transaction.transaction_id}"></td>
+                <td th:text="${transaction.salesman}"></td>
+                <td th:text="${transaction.item}"></td>
+                <td th:text="${transaction.amount}"></td>
+                <td th:text="${#dates.format(transaction.transactionDate, 'yyyy-MM-dd')}"></td>
+                <td>
+                    <a class="btn btn-danger" onClick="return confirm('Are you sure you want to delete the record?')"  th:href="@{/delete(id=${transaction.transaction_id})}">Delete</a>
+                    <a class="btn btn-success" th:href="@{/transactions/delete/{id}(id=${transaction.transaction_id})}">Edit</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+</body>
+</html>
